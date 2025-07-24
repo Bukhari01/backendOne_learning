@@ -1,8 +1,8 @@
 import {Document} from "mongoose";
 
-export interface Iuser extends Document {
+export interface Iadmin extends Document {
     name: string;
     email: string;
     password: string;
-    role: "User";
+    role: "Admin";
 }

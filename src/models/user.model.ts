@@ -18,9 +18,9 @@ const userSchema = new Schema<Iuser>({
     },
     role: {
         type: String,
-        enum: ["User", "Admin"],
+        enum: ["User"],
         default: "User",
     },
 }, {timestamps: true});
 
-export const userModel = model<Iuser>("User", userSchema);
+export default model<Iuser>("User", userSchema);
