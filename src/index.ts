@@ -2,6 +2,7 @@ import ConnectToDB from "./config/db";
 import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
+import mongoose from 'mongoose';
 
 
 const app = express();
@@ -14,8 +15,11 @@ ConnectToDB().then(() => {
     app.listen(PORT, () => {
         console.log(`server is running on port: ${PORT}`);
     });
+
 }).catch((error) => {
     console.error("failed to connect to database:", error);
 });
+
+
 
 export default app;
