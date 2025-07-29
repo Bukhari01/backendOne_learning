@@ -56,3 +56,9 @@ export const loginUser = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Server error', error });
   }
 }; 
+
+// User Logout
+export const logoutUser = async (req: Request, res: Response) => {
+  //(stateless logout)
+  res.status(200).json({ message: 'User logged out successfully. Please remove the token from your client.' });
+}; 

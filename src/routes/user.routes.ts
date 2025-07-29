@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { registerUser, loginUser } from '../controllers/user.controller';
+import { registerUser, loginUser, logoutUser } from '../controllers/user.controller';
 
 const router = Router();
 
@@ -8,5 +8,8 @@ router.post('/register', registerUser);
 
 //login user route
 router.post('/login', loginUser);
+
+//logout user route
+router.post('/logout', logoutUser);
 
 export default router; 
