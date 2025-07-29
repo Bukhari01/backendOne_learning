@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { hashPassword, comparePassword } from '../utils/hashPassword';
 import { generateToken } from '../utils/generateToken';
 import { Iadmin } from '../interfaces/admin.interface';
+import { Types } from 'mongoose';
 
 
 export const registerAdmin = async (req: Request, res: Response) => {
@@ -24,7 +25,7 @@ export const registerAdmin = async (req: Request, res: Response) => {
     //response
     res.status(201).json({
       message: 'Admin registered successfully',
-      admin: { _id: String((admin.id as any)), name: admin.name, email: admin.email, role: admin.role }
+      admin: { _id: String((admin._id as any)), name: admin.name, email: admin.email, role: admin.role }
     });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error });
@@ -46,10 +47,18 @@ export const loginAdmin = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Invalid details' });
     }
     //generating token
-    const token = generateToken(admin.id.toString(), admin.role);
+    const token = generateToken(
+      typeof admin._id === 'string' ? admin._id : (admin._id as Types.ObjectId).toHexString(),
+      admin.role
+    );
     //response
     res.status(200).json({
-      admin: { _id: String((admin.id as any)), name: admin.name, email: admin.email, role: admin.role },
+      admin: {
+        _id: typeof admin._id === 'string' ? admin._id : (admin._id as Types.ObjectId).toHexString(),
+        name: admin.name,
+        email: admin.email,
+        role: admin.role,
+      },
       token,
     });
   } catch (error) {

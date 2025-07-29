@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { hashPassword, comparePassword } from '../utils/hashPassword';
 import { generateToken } from '../utils/generateToken';
 import { Iuser } from '../interfaces/user.interface';
+import { Types } from 'mongoose';
 
 
 export const registerUser = async (req: Request, res: Response) => {
@@ -22,7 +23,7 @@ export const registerUser = async (req: Request, res: Response) => {
     //response
     res.status(201).json({
       message: 'User registered successfully',
-      user: { _id: String((user.id as any)), name: user.name, email: user.email, role: user.role }
+      user: { _id: String((user._id as any)), name: user.name, email: user.email, role: user.role }
     });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error });
@@ -45,11 +46,19 @@ export const loginUser = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Invalid details' });
     }
     //generating token
-    const token = generateToken(user.id.toString(), user.role);
+    const token = generateToken(
+      typeof user._id === 'string' ? user._id : (user._id as Types.ObjectId).toHexString(),
+      user.role
+    );
     
     //response
     res.status(200).json({
-      user: { _id: String((user.id as any)), name: user.name, email: user.email, role: user.role },
+      user: {
+        _id: typeof user._id === 'string' ? user._id : (user._id as Types.ObjectId).toHexString(),
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
       token,
     });
   } catch (error) {
